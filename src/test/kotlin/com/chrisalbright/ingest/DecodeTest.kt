@@ -52,4 +52,17 @@ class DecodeTest {
                     }
 
 
+    @TestFactory
+    fun `Can decode string values`() =
+            listOf(
+                    "left padding    " to "left padding",
+                    "   right padding" to "right padding"
+            )
+                    .map { (input: String, expected: String) ->
+                        dynamicTest("Decoding '$input' as string yields '$expected'") {
+                            assertEquals(expected, input.decodeString())
+                        }
+                    }
+
+
 }

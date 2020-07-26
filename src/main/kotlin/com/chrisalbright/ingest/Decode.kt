@@ -25,3 +25,7 @@ fun String.decodeInteger(): Option<BigInteger> {
         None
     }
 }
+
+fun String.decodeString(): String = trim()
+
+fun String.toFlags(): Flags = Flags(this)
