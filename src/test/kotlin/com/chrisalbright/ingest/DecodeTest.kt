@@ -6,6 +6,7 @@ import arrow.core.Some
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.math.BigDecimal
+import java.math.BigInteger
 import kotlin.test.assertEquals
 
 class DecodeTest {
@@ -31,5 +32,24 @@ class DecodeTest {
                             assertEquals(expected, input.decodeCurrency())
                         }
                     }
+
+    @TestFactory
+    fun `Can decode integer values`() =
+            listOf(
+                    "0" to Some(BigInteger.ZERO),
+                    "1" to Some(BigInteger.ONE),
+                    "10" to Some(BigInteger("10")),
+                    "100" to Some(BigInteger("100")),
+                    "12345" to Some(BigInteger("12345")),
+                    "TotallyNotANumber" to None,
+                    "123PartiallyNotANumber" to None,
+                    "-NegativeNotANumber" to None
+            )
+                    .map { (input: String, expected: Option<BigInteger>) ->
+                        dynamicTest("Decoding $input as number yields $expected") {
+                            assertEquals(expected, input.decodeInteger())
+                        }
+                    }
+
 
 }
