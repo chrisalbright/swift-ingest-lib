@@ -12,13 +12,13 @@ import kotlin.test.assertEquals
 
 class ProductCatalogTransformerTest {
     @Test
-    fun `Can parse input record`() {
+    fun `Can transform input string into an InputRecord`() {
         // given
         val inputString = "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 00000000 00000000 00000000 NNNNNNNNN      18oz"
         val productCatalogTransformer: ProductCatalogTransformer<String, Option<InputRecord>> = SomeStoreProductCatalogTransformer()
 
         // when
-        val inputRecord: Option<InputRecord> = productCatalogTransformer.apply(inputString)
+        val inputRecord: Option<InputRecord> = productCatalogTransformer(inputString)
 
         // then
         val expected: Some<InputRecord> = Some(InputRecord(BigInteger.valueOf(80000001), "Kimchi-flavored white rice", BigDecimal("5.67"), BigDecimal("0.00"), BigDecimal("0.00"), BigDecimal("0.00"), BigInteger.ZERO, BigInteger.ZERO, Flags("NNNNNNNNN"), "18oz"))
@@ -26,7 +26,7 @@ class ProductCatalogTransformerTest {
     }
 
     @TestFactory
-    fun `Non conforming input records are ignored`(): List<DynamicTest> {
+    fun `Non conforming input strings are ignored`(): List<DynamicTest> {
 
         val productCatalogTransformer: ProductCatalogTransformer<String, Option<InputRecord>> = SomeStoreProductCatalogTransformer()
 
@@ -41,8 +41,41 @@ class ProductCatalogTransformerTest {
                 "Bad Promotional For X" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 00000000 00000000 A0000000 NNNNNNNNN      18oz"
         ).map { (description, badInput) ->
             DynamicTest.dynamicTest("$description doesn't parse") {
-                assertEquals(None, productCatalogTransformer.apply(badInput))
+                assertEquals(None, productCatalogTransformer(badInput))
             }
         }
+    }
+
+    @Test
+    fun `Can transform InputRecord into a ProductRecord`() {
+        // given
+        val inputRecord = InputRecord(
+                productId = BigInteger("80000001"),
+                description = "Kimchi-flavored white rice",
+                regularSingularPrice = BigDecimal("5.67"),
+                promotionalSingularPrice = BigDecimal("0.00"),
+                regularSplitPrice = BigDecimal("0.00"),
+                promotionalSplitPrice = BigDecimal("0.00"),
+                regularForX = BigInteger.ZERO,
+                promotionalForX = BigInteger.ZERO,
+                flags = Flags("NNNNNNNNN"),
+                productSize = "18oz")
+
+        val productCatalogTransformer: ProductCatalogTransformer<InputRecord, ProductRecord> = InputRecordTransformer(BigDecimal::toString, { BigDecimal("0.0775") })
+
+        // when
+        val productRecord: ProductRecord = productCatalogTransformer(inputRecord)
+
+        // then
+        val expected = ProductRecord(
+                productId = BigInteger("80000001"),
+                productDescription = "Kimchi-flavored white rice",
+                regularDisplayPrice = "$5.67 Each",
+                regularCalculatorPrice = BigDecimal("5.67"),
+                promotionalDisplayPrice = None,
+                promotionalCalculatorPrice = None,
+                unitOfMeasure = ProductRecord.UnitOfMeasure.Each,
+                productSize = "18oz", taxRate = None)
+        assertEquals(expected, productRecord)
     }
 }

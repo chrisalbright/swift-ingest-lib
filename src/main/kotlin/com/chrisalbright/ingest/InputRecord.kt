@@ -15,3 +15,6 @@ data class InputRecord(
         val flags: Flags,
         val productSize: String
 )
+
+fun InputRecord.isTaxable(): Boolean = flags.isTaxable()
+fun InputRecord.isSoldByWeight(): Boolean = flags.isSoldByWeight()

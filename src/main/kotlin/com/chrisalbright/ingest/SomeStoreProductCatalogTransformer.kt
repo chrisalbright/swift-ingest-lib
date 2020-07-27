@@ -4,7 +4,7 @@ import arrow.core.Option
 import arrow.core.extensions.fx
 
 class SomeStoreProductCatalogTransformer : ProductCatalogTransformer<String, Option<InputRecord>> {
-    override fun apply(inputString: String): Option<InputRecord> = Option.fx {
+    override fun invoke(inputString: String): Option<InputRecord> = Option.fx {
         val (productId) = inputString.substring(0, 8).decodeInteger()
         val productDescription = inputString.substring(9, 68).decodeString()
         val (regularSingularPrice) = inputString.substring(69, 77).decodeCurrency()
