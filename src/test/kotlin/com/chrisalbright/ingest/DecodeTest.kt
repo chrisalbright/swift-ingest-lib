@@ -13,11 +13,11 @@ class DecodeTest {
     @TestFactory
     fun `Can decode currency values`() =
             listOf(
-                    "0" to Some(BigDecimal("0.00")),
+                    "0" to Some(Pricing.ZERO),
                     "1" to Some(BigDecimal("0.01")),
                     "10" to Some(BigDecimal("0.10")),
                     "100" to Some(BigDecimal("1.00")),
-                    "-0" to Some(BigDecimal("0.00")),
+                    "-0" to Some(Pricing.ZERO),
                     "-1" to Some(BigDecimal("-0.01")),
                     "-10" to Some(BigDecimal("-0.10")),
                     "-100" to Some(BigDecimal("-1.00")),
