@@ -6,9 +6,18 @@ import arrow.core.Some
 import java.math.BigDecimal
 import java.util.*
 
-typealias TaxRateSupplier = () -> BigDecimal
+typealias TaxRateStrategy = (InputRecord) -> Option<BigDecimal>
 
-class InputRecordTransformer(val getTaxRate: TaxRateSupplier, val locale: Locale = Locale.US) : ProductCatalogTransformer<InputRecord, ProductRecord> {
+class RegularTaxRateStrategy(private val rate: BigDecimal) : TaxRateStrategy {
+    override fun invoke(inputRecord: InputRecord): Option<BigDecimal> =
+            if (inputRecord.isTaxable()) {
+                Some(rate)
+            } else {
+                None
+            }
+}
+
+class InputRecordTransformer(val getTaxRate: TaxRateStrategy, val locale: Locale = Locale.US) : ProductCatalogTransformer<InputRecord, ProductRecord> {
     override fun invoke(t: InputRecord): ProductRecord {
         val unitOfMeasure: ProductRecord.UnitOfMeasure = if (t.isSoldByWeight()) {
             ProductRecord.UnitOfMeasure.Pound
@@ -16,11 +25,7 @@ class InputRecordTransformer(val getTaxRate: TaxRateSupplier, val locale: Locale
             ProductRecord.UnitOfMeasure.Each
         }
 
-        val taxRate: Option<BigDecimal> = if (t.isTaxable()) {
-            Some(getTaxRate())
-        } else {
-            None
-        }
+        val taxRate: Option<BigDecimal> = getTaxRate(t)
 
         val regularPricing: Pricing = Pricing.of(t.regularSingularPrice, t.regularSplitPrice, t.regularForX)
         val promotionalPricing: Option<Pricing> = Some(Pricing.of(t.promotionalSingularPrice, t.promotionalSplitPrice, t.promotionalForX)).filterNot { it == Undefined }

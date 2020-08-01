@@ -160,7 +160,9 @@ class ProductCatalogTransformerTest {
                 productSize = "lb", taxRate = None)
 
 
-        val inputToProductCatalog: ProductCatalogTransformer<InputRecord, ProductRecord> = InputRecordTransformer({ BigDecimal("0.0775") })
+        val taxRateStrategy = RegularTaxRateStrategy(BigDecimal("0.0775"))
+        val inputToProductCatalog: ProductCatalogTransformer<InputRecord, ProductRecord> =
+                InputRecordTransformer(taxRateStrategy)
 
         return listOf(
                 inputRecord1 to expected1,
