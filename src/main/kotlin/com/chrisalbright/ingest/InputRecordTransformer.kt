@@ -5,7 +5,7 @@ import arrow.core.Some
 import java.math.BigDecimal
 import java.util.*
 
-class InputRecordTransformer(val getTaxRate: TaxRateStrategy, val getUnitOfMeasure: UnitOfMeasureStrategy, val locale: Locale = Locale.US) : ProductCatalogTransformer<InputRecord, ProductRecord> {
+class InputRecordTransformer(val getTaxRate: TaxRateStrategy, val getUnitOfMeasure: UnitOfMeasureStrategy, val locale: Locale = Locale.US) : InputRecordToProductRecord {
     override fun invoke(t: InputRecord): ProductRecord {
         val unitOfMeasure: ProductRecord.UnitOfMeasure = getUnitOfMeasure(t)
 
