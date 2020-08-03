@@ -16,6 +16,7 @@
         <kotlin.version>1.3.72</kotlin.version>
         <junit.version>5.6.2</junit.version>
         <arrow.version>0.10.4</arrow.version>
+        <dependency.dir>lib</dependency.dir>
     </properties>
 
     <dependencyManagement>
@@ -125,6 +126,37 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${dependency.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <finalName>swift-ingest-lib-example</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.chrisalbright.ingest.cli.ConvertAndPrintSingleCatalogFileKt</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>${project.build.directory}/${dependency.dir}</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
