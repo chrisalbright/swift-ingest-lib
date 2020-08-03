@@ -10,7 +10,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.test.assertEquals
 
-class ProductCatalogTransformerTest {
+class SomeStoreProductCatalogTransformerTest {
     @Test
     fun `Can transform input string into an InputRecord`() {
         // given
@@ -38,7 +38,8 @@ class ProductCatalogTransformerTest {
                 "Bad Regular Split Price" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 A0000000 00000000 00000000 00000000 NNNNNNNNN      18oz",
                 "Bad Promotional Split Price" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 A0000000 00000000 00000000 NNNNNNNNN      18oz",
                 "Bad Regular For X" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 00000000 A0000000 00000000 NNNNNNNNN      18oz",
-                "Bad Promotional For X" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 00000000 00000000 A0000000 NNNNNNNNN      18oz"
+                "Bad Promotional For X" to "80000001 Kimchi-flavored white rice                                  00000567 00000000 00000000 00000000 00000000 A0000000 NNNNNNNNN      18oz",
+                "Empty Record" to ""
         ).map { (description, badInput) ->
             DynamicTest.dynamicTest("$description doesn't parse") {
                 assertEquals(None, productCatalogTransformer(badInput))
