@@ -5,10 +5,11 @@ import arrow.core.Option
 import arrow.core.Some
 import java.math.BigDecimal
 
-typealias TaxRateStrategy = (InputRecord) -> Option<BigDecimal>
+typealias TaxRate = BigDecimal
+typealias TaxRateStrategy = (InputRecord) -> Option<TaxRate>
 
-class RegularTaxRateStrategy(private val rate: BigDecimal) : TaxRateStrategy {
-    override fun invoke(inputRecord: InputRecord): Option<BigDecimal> =
+class RegularTaxRateStrategy(private val rate: TaxRate) : TaxRateStrategy {
+    override fun invoke(inputRecord: InputRecord): Option<TaxRate> =
             if (inputRecord.isTaxable()) {
                 Some(rate)
             } else {
