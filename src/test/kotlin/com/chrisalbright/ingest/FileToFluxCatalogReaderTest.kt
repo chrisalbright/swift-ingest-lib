@@ -9,14 +9,14 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.net.URI
 
-class FileCatalogReaderTest {
+class FileToFluxCatalogReaderTest {
 
     @Test
     fun `FileCatalogReader converts a file to CatalogLines`() {
         // given
         val fileUri: URI = javaClass.getResource("/input-sample.txt").toURI()
         val inputFile = File(fileUri)
-        val readFileToCatalogLines = FileCatalogFluxReader()
+        val readFileToCatalogLines = FileToFluxCatalogReader()
 
         // when
         val lines: CatalogLines = readFileToCatalogLines(inputFile)

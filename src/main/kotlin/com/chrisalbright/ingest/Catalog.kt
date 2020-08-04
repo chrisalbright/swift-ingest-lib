@@ -10,7 +10,7 @@ typealias ProductRecords = Flux<ProductRecord>
 
 interface CatalogReader<I> : Function1<I, CatalogLines>
 
-class FileCatalogFluxReader : CatalogReader<File> {
+class FileToFluxCatalogReader : CatalogReader<File> {
     override fun invoke(input: File): CatalogLines =
             Flux.create<String> { sink ->
                 input.forEachLine { line ->
@@ -20,7 +20,7 @@ class FileCatalogFluxReader : CatalogReader<File> {
             }
 }
 
-fun File.readCatalogLines(): CatalogLines = FileCatalogFluxReader().invoke(this)
+fun File.readCatalogLines(): CatalogLines = FileToFluxCatalogReader().invoke(this)
 
 fun CatalogLines.convertToProductRecords(transform: StringToProductRecord): ProductRecords =
         flatMap { s ->
