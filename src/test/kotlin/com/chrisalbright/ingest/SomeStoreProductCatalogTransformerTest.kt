@@ -123,8 +123,8 @@ class SomeStoreProductCatalogTransformerTest {
                 promotionalSingularPrice = Pricing.ZERO,
                 regularSplitPrice = BigDecimal("2.34"),
                 promotionalSplitPrice = BigDecimal("1.00"),
-                regularForX = BigInteger.TWO,
-                promotionalForX = BigInteger.TWO,
+                regularForX = BigInteger("2"),
+                promotionalForX = BigInteger("2"),
                 flags = Flags("NNNNYNN"),
                 productSize = "18oz")
 
