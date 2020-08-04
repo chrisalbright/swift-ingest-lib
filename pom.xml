@@ -151,7 +151,7 @@
                     <finalName>swift-ingest-lib-example</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.chrisalbright.ingest.cli.ConvertAndPrintSingleCatalogFileKt</mainClass>
+                            <mainClass>com.chrisalbright.ingest.cli.IngestAndPrintWatchedDirectoryKt</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>${project.build.directory}/${dependency.dir}</classpathPrefix>
                         </manifest>
